@@ -1,35 +1,32 @@
-/// <reference types="node" />
+import Anthropic from '@anthropic-ai/sdk';
+import { PriceAgent } from './agents/priceAgent';
 
-import { normalizeUrl, tryParseUrl, detectSite } from "./core/urlUtils";
-import { PriceAgent } from "./agents/priceAgent";
-
-async function main() {
-  const rawUrl = process.argv[2];
-
-  if (!rawUrl) {
-    console.error("Användning: npm run pricehunt -- <produkt-url>");
-    process.exit(1);
-    return; // för TS, även om process.exit aldrig kommer tillbaka
-  }
-
-  const normalized = normalizeUrl(rawUrl);
-  const parsed = tryParseUrl(normalized);
-
-  if (!parsed) {
-    console.error(
-      "Ogiltig URL. Försök igen med en fullständig länk, t.ex. https://..."
-    );
-    process.exit(1);
-    return; // för att TS ska förstå att parsed inte kan vara null efter detta
-  }
-
-  const site = detectSite(parsed);
-  const agent = new PriceAgent();
-
-  await agent.run(parsed, site);
-}
-
-main().catch((err) => {
-  console.error("Ett fel uppstod:", err);
-  process.exit(1);
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+const priceAgent = new PriceAgent();
+
+export async function runPriceHuntAgent(userQuery: string) {
+  console.log('🔍 User Query:', userQuery);
+  
+  const message = await client.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 1024,
+    system: priceAgent.systemPrompt,
+    messages: [
+      {
+        role: 'user',
+        content: userQuery,
+      },
+    ],
+  });
+
+  const response = message.content,[object Object],;
+  
+  if (response.type === 'text') {
+    return response.text;
+  }
+  
+  return 'No response';
+}
