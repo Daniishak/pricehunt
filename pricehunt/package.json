@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "pricehunt": "tsx src/index.ts"
+    "pricehunt": "tsx src/index.ts",
+    "test:claude": "tsx src/ai/testClaude.ts"
   },
   "dependencies": {
     "react": "^19.2.0",

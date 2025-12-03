@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 import { PriceAgent } from './agents/priceAgent';
 
@@ -22,7 +23,8 @@ export async function runPriceHuntAgent(userQuery: string) {
     ],
   });
 
-  const response = message.content,[object Object],;
+  const response = message.content[0];
+
   
   if (response.type === 'text') {
     return response.text;

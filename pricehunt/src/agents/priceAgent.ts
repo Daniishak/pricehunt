@@ -1,13 +1,15 @@
 export class PriceAgent {
-  async run(url: URL, site: string): Promise<void> {
-    console.log("=== PriceAgent v0.1 ===");
-    console.log(`Källa: ${site}`);
-    console.log(`URL:   ${url.href}`);
-    console.log("");
-    console.log("Plan (framtida steg):");
-    console.log("- Hämta produktsida");
-    console.log("- Extrahera produktnamn / modellnummer");
-    console.log("- Sök efter samma produkt på andra sajter");
-    console.log("- Sortera erbjudanden efter pris");
+  systemPrompt: string;
+
+  constructor() {
+    this.systemPrompt = `Du är en prisjaktsassistent som hjälper användare att hitta bästa priserna på produkter.
+
+Din uppgift:
+- Analysera användarens förfrågan om produkter
+- Ge tips på var man kan hitta bra priser
+- Jämför priser från olika butiker
+- Ge rekommendationer baserat på pris och kvalitet
+
+Svara alltid på svenska och var hjälpsam och tydlig.`;
   }
 }
